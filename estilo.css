@@ -1,0 +1,17 @@
+header {
+  padding: 10px;
+  background-color: #ef6c13;
+  color: #fff;
+}
+h1 {
+  font-weight: 900;
+  font-size: 40px;
+}
+body {
+  background-color: beige;
+  margin: 0;
+}
+p {
+  color: red;
+  background: black;
+}
