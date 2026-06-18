@@ -1,19 +1,784 @@
-<html>
+<!doctype html>
+<html lang="es">
   <head>
-    <title>mi pagina</title>
-    <link rel="stylesheet" href="estilo.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FarmaPro</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f5f5f5;
+        color: #333;
+      }
+
+      /* HEADER */
+      header {
+        background: white;
+        padding: 1rem 0;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .header-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo {
+        font-size: 2.5rem;
+        font-weight: 900;
+        font-family: "Segoe UI", sans-serif;
+        letter-spacing: -1px;
+      }
+
+      .pharma {
+        background: linear-gradient(90deg, #82d8a5, #52cdb6, #43b8c6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .punto {
+        color: #35c1b0;
+        margin: 0 4px;
+      }
+
+      .pro {
+        background: linear-gradient(90deg, #8b95dc, #5f6fd6, #1f2f7d);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .user-menu {
+        display: flex;
+        gap: 1.5rem;
+        align-items: center;
+      }
+
+      .user-menu a {
+        text-decoration: none;
+        color: #555;
+        font-size: 0.9rem;
+        transition: color 0.3s;
+      }
+
+      .user-menu a:hover {
+        color: #e74c3c;
+      }
+
+      .carrito-badge {
+        background: #e74c3c;
+        color: white;
+        padding: 0.3rem 0.6rem;
+        border-radius: 50%;
+        font-size: 0.8rem;
+      }
+
+      /* BÚSQUEDA */
+      .busqueda-section {
+        background: white;
+        padding: 1rem 0;
+        border-bottom: 1px solid #ddd;
+      }
+
+      .busqueda-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+      }
+
+      .buscador {
+        display: flex;
+        gap: 1rem;
+      }
+
+      .buscador input {
+        flex: 1;
+        padding: 0.8rem;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 1rem;
+      }
+
+      .buscador button {
+        padding: 0.8rem 2rem;
+        background: #e74c3c;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background 0.3s;
+      }
+
+      .buscador button:hover {
+        background: #c0392b;
+      }
+
+      /* NAVEGACIÓN */
+      nav {
+        background: #2c3e50;
+      }
+
+      nav ul {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+        display: flex;
+        list-style: none;
+        flex-wrap: wrap;
+      }
+
+      nav li {
+        position: relative;
+      }
+
+      nav a {
+        display: block;
+        padding: 1rem 1.5rem;
+        color: white;
+        text-decoration: none;
+        transition: background 0.3s;
+      }
+
+      nav a:hover {
+        background: #e74c3c;
+      }
+
+      /* BANNER */
+      .banner {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 2rem;
+      }
+
+      .banner-image {
+        width: 100%;
+        max-height: 300px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+
+      /* MAIN CONTENT */
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+      }
+
+      /* FILTROS Y PRODUCTOS */
+      .productos-section {
+        display: grid;
+        grid-template-columns: 250px 1fr;
+        gap: 2rem;
+        margin: 2rem 0;
+      }
+
+      /* SIDEBAR FILTROS */
+      .filtros {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 8px;
+        height: fit-content;
+      }
+
+      .filtros h3 {
+        margin-bottom: 1rem;
+        color: #2c3e50;
+        border-bottom: 2px solid #e74c3c;
+        padding-bottom: 0.5rem;
+      }
+
+      .filtro-grupo {
+        margin-bottom: 1.5rem;
+      }
+
+      .filtro-grupo label {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.5rem;
+        cursor: pointer;
+        font-size: 0.95rem;
+      }
+
+      .filtro-grupo input[type="checkbox"] {
+        margin-right: 0.5rem;
+        cursor: pointer;
+      }
+
+      .filtro-grupo input[type="range"] {
+        width: 100%;
+      }
+
+      /* LISTADO DE PRODUCTOS */
+      .productos-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1.5rem;
+      }
+
+      .producto-card {
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transition:
+          transform 0.3s,
+          box-shadow 0.3s;
+      }
+
+      .producto-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      }
+
+      .producto-imagen {
+        width: 100%;
+        height: 180px;
+        background: #f0f0f0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ccc;
+        font-size: 3rem;
+        position: relative;
+      }
+
+      .producto-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: #e74c3c;
+        color: white;
+        padding: 0.4rem 0.8rem;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        font-weight: bold;
+      }
+
+      .producto-info {
+        padding: 1rem;
+      }
+
+      .producto-nombre {
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+        font-size: 0.95rem;
+        color: #2c3e50;
+      }
+
+      .producto-descripcion {
+        color: #777;
+        font-size: 0.85rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .producto-precio {
+        font-size: 1.3rem;
+        color: #e74c3c;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+      }
+
+      .precio-original {
+        text-decoration: line-through;
+        color: #999;
+        font-size: 0.9rem;
+        margin-right: 0.5rem;
+      }
+
+      .descuento {
+        background: #27ae60;
+        color: white;
+        padding: 0.2rem 0.5rem;
+        border-radius: 3px;
+        font-size: 0.8rem;
+      }
+
+      .stock-status {
+        font-size: 0.85rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .stock-disponible {
+        color: #27ae60;
+      }
+
+      .stock-bajo {
+        color: #e67e22;
+      }
+
+      .stock-agotado {
+        color: #e74c3c;
+      }
+
+      .agregar-carrito {
+        width: 100%;
+        padding: 0.7rem;
+        background: #e74c3c;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background 0.3s;
+      }
+
+      .agregar-carrito:hover {
+        background: #c0392b;
+      }
+
+      .agregar-carrito:disabled {
+        background: #bdc3c7;
+        cursor: not-allowed;
+      }
+
+      /* FOOTER */
+      footer {
+        background: #2c3e50;
+        color: white;
+        margin-top: 3rem;
+        padding: 2rem;
+      }
+
+      .footer-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin-bottom: 2rem;
+      }
+
+      .footer-section h4 {
+        margin-bottom: 1rem;
+        border-bottom: 2px solid #e74c3c;
+        padding-bottom: 0.5rem;
+      }
+
+      .footer-section ul {
+        list-style: none;
+      }
+
+      .footer-section a {
+        color: #bbb;
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: color 0.3s;
+      }
+
+      .footer-section a:hover {
+        color: white;
+      }
+
+      .footer-section li {
+        margin-bottom: 0.5rem;
+      }
+
+      .footer-bottom {
+        text-align: center;
+        border-top: 1px solid #555;
+        padding-top: 1rem;
+        color: #bbb;
+      }
+
+      /* RESPONSIVE */
+      @media (max-width: 768px) {
+        .productos-section {
+          grid-template-columns: 1fr;
+        }
+
+        .productos-grid {
+          grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        }
+
+        .header-container {
+          flex-direction: column;
+          gap: 1rem;
+        }
+
+        nav ul {
+          gap: 0;
+        }
+
+        nav a {
+          padding: 0.8rem 1rem;
+          font-size: 0.9rem;
+        }
+
+        .buscador {
+          flex-direction: column;
+        }
+      }
+    </style>
   </head>
   <body>
+    <!-- HEADER -->
     <header>
-      Este es el header
-
-      <button>Mi boton</button>
+      <div class="header-container">
+        <div class="logo">
+          <span class="pharma">PharmaPro</span>
+        </div>
+        <div class="user-menu">
+          <a href="#login">Iniciar sesión</a>
+          <a href="#registro">Registrarse</a>
+          <a href="#carrito">
+            🛒 Carrito
+            <span class="carrito-badge" id="cart-count">0</span>
+          </a>
+        </div>
+      </div>
     </header>
-    <h1>BOB ESPONJA</h1>
-    <h2>subtitulo</h2>
-    <p>somos unos cracks</p>
-    <a href="menu.html"> Ir al menu</a>
-    <button>Mi boton</button>
-    <input type="date" />
+
+    <!-- BÚSQUEDA -->
+    <section class="busqueda-section">
+      <div class="busqueda-container">
+        <form class="buscador">
+          <input
+            type="text"
+            placeholder="Buscar medicamentos, vitaminas, productos..."
+            id="busqueda"
+          />
+          <button type="submit">Buscar</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- NAVEGACIÓN -->
+    <nav>
+      <ul>
+        <li><a href="#inicio">Inicio</a></li>
+        <li><a href="#medicamentos">Medicamentos</a></li>
+        <li><a href="#vitaminas">Vitaminas</a></li>
+        <li><a href="#cuidado">Cuidado Personal</a></li>
+        <li><a href="#bebes">Bebés</a></li>
+        <li><a href="#ofertas">Ofertas</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+      </ul>
+    </nav>
+
+    <!-- BANNER -->
+    <section class="banner">
+      <div class="banner-image">
+        📢 ¡OFERTAS DE HASTA 50% EN PRODUCTOS SELECCIONADOS!
+      </div>
+    </section>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <div class="container">
+      <div class="productos-section">
+        <!-- FILTROS -->
+        <aside class="filtros">
+          <h3>Filtrar</h3>
+
+          <div class="filtro-grupo">
+            <h4 style="font-size: 0.95rem; margin-bottom: 0.8rem">Categoría</h4>
+            <label><input type="checkbox" /> Medicamentos</label>
+            <label><input type="checkbox" /> Vitaminas</label>
+            <label><input type="checkbox" /> Cuidado Personal</label>
+            <label><input type="checkbox" /> Bebés</label>
+            <label><input type="checkbox" /> Salud Sexual</label>
+          </div>
+
+          <div class="filtro-grupo">
+            <h4 style="font-size: 0.95rem; margin-bottom: 0.8rem">Marca</h4>
+            <label><input type="checkbox" /> Aspirina</label>
+            <label><input type="checkbox" /> Tafirol</label>
+            <label><input type="checkbox" /> Ibupirac</label>
+            <label><input type="checkbox" /> Omeprazol</label>
+          </div>
+
+          <div class="filtro-grupo">
+            <h4 style="font-size: 0.95rem; margin-bottom: 0.8rem">
+              Rango de Precio
+            </h4>
+            <label>Precio: <span id="precio-rango">$0 - $500</span></label>
+            <input
+              type="range"
+              min="0"
+              max="500"
+              value="500"
+              id="filtro-precio"
+            />
+          </div>
+
+          <div class="filtro-grupo">
+            <h4 style="font-size: 0.95rem; margin-bottom: 0.8rem">
+              Disponibilidad
+            </h4>
+            <label><input type="checkbox" checked /> En Stock</label>
+            <label><input type="checkbox" /> Envío Rápido</label>
+          </div>
+        </aside>
+
+        <!-- PRODUCTOS -->
+        <section>
+          <h2 style="margin-bottom: 1.5rem; color: #2c3e50">
+            Productos Destacados
+          </h2>
+          <div class="productos-grid" id="productos-container">
+            <!-- Los productos se cargarán aquí -->
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer id="contacto">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>Sobre PharmaPro</h4>
+          <p>
+            Tu farmacia de confianza en línea. Oferecemos medicamentos,
+            vitaminas y productos de salud con los mejores precios.
+          </p>
+        </div>
+        <div class="footer-section">
+          <h4>Categorías</h4>
+          <ul>
+            <li><a href="#">Medicamentos</a></li>
+            <li><a href="#">Vitaminas</a></li>
+            <li><a href="#">Cuidado Personal</a></li>
+            <li><a href="#">Bebés</a></li>
+            <li><a href="#">Salud Sexual</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Información</h4>
+          <ul>
+            <li><a href="#">Términos y Condiciones</a></li>
+            <li><a href="#">Política de Privacidad</a></li>
+            <li><a href="#">Formas de Pago</a></li>
+            <li><a href="#">Envíos</a></li>
+            <li><a href="#">Devoluciones</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Contacto</h4>
+          <ul>
+            <li><a href="mailto:info@PharmaPro.com">info@PharmaPro.com</a></li>
+            <li><a href="tel:+5491234567890">+549 1234-567890</a></li>
+            <li><a href="#">Chat en vivo</a></li>
+            <li><a href="#">Redes Sociales</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2024 PharmaPro. Todos los derechos reservados.</p>
+      </div>
+    </footer>
+
+    <script>
+      // Datos de productos de ejemplo
+      const productos = [
+        {
+          id: 1,
+          nombre: "Paracetamol 500mg",
+          marca: "Tafirol",
+          precio: 45.99,
+          precioOriginal: 65.99,
+          descripcion: "Caja x 20 comprimidos",
+          categoria: "Medicamentos",
+          stock: 15,
+          descuento: 30,
+          emoji: "💊",
+        },
+        {
+          id: 2,
+          nombre: "Ibuprofeno 400mg",
+          marca: "Ibupirac",
+          precio: 55.99,
+          precioOriginal: 79.99,
+          descripcion: "Caja x 24 comprimidos",
+          categoria: "Medicamentos",
+          stock: 8,
+          descuento: 30,
+          emoji: "💊",
+        },
+        {
+          id: 3,
+          nombre: "Vitamina C 1000mg",
+          marca: "Genérico",
+          precio: 35.99,
+          precioOriginal: null,
+          descripcion: "Caja x 30 comprimidos",
+          categoria: "Vitaminas",
+          stock: 20,
+          descuento: 0,
+          emoji: "🧬",
+        },
+        {
+          id: 4,
+          nombre: "Complejo B",
+          marca: "Genérico",
+          precio: 42.5,
+          precioOriginal: 60,
+          descripcion: "Caja x 20 comprimidos",
+          categoria: "Vitaminas",
+          stock: 12,
+          descuento: 29,
+          emoji: "🧬",
+        },
+        {
+          id: 5,
+          nombre: "Omeprazol 20mg",
+          marca: "Genérico",
+          precio: 38.99,
+          precioOriginal: 55.99,
+          descripcion: "Caja x 14 cápsulas",
+          categoria: "Medicamentos",
+          stock: 5,
+          descuento: 30,
+          emoji: "💊",
+        },
+        {
+          id: 6,
+          nombre: "Loción corporal",
+          marca: "Genérico",
+          precio: 28.5,
+          precioOriginal: null,
+          descripcion: "Botella x 250ml",
+          categoria: "Cuidado Personal",
+          stock: 25,
+          descuento: 0,
+          emoji: "🧴",
+        },
+        {
+          id: 7,
+          nombre: "Crema humectante",
+          marca: "Genérico",
+          precio: 65.99,
+          precioOriginal: 95.99,
+          descripcion: "Frasco x 100ml",
+          categoria: "Cuidado Personal",
+          stock: 10,
+          descuento: 31,
+          emoji: "🧴",
+        },
+        {
+          id: 8,
+          nombre: "Pañales Premium",
+          marca: "Genérico",
+          precio: 125.99,
+          precioOriginal: 165.99,
+          descripcion: "Pack x 50 unidades",
+          categoria: "Bebés",
+          stock: 7,
+          descuento: 24,
+          emoji: "👶",
+        },
+      ];
+
+      let carrito = [];
+
+      // Función para renderizar productos
+      function renderProductos(productosAMostrar = productos) {
+        const container = document.getElementById("productos-container");
+        container.innerHTML = "";
+
+        productosAMostrar.forEach((producto) => {
+          const stockClass =
+            producto.stock > 10
+              ? "stock-disponible"
+              : producto.stock > 0
+                ? "stock-bajo"
+                : "stock-agotado";
+          const stockText =
+            producto.stock > 0 ? `${producto.stock} en stock` : "Agotado";
+
+          const html = `
+                    <div class="producto-card">
+                        <div class="producto-imagen">
+                            ${producto.emoji}
+                            ${producto.descuento > 0 ? `<span class="producto-badge">-${producto.descuento}%</span>` : ""}
+                        </div>
+                        <div class="producto-info">
+                            <div style="font-size: 0.8rem; color: #7f8c8d; margin-bottom: 0.3rem;">${producto.marca}</div>
+                            <div class="producto-nombre">${producto.nombre}</div>
+                            <div class="producto-descripcion">${producto.descripcion}</div>
+                            <div class="stock-status ${stockClass}">${stockText}</div>
+                            <div style="margin-bottom: 0.8rem;">
+                                ${producto.precioOriginal ? `<span class="precio-original">$${producto.precioOriginal}</span>` : ""}
+                                <span class="producto-precio">$${producto.precio}</span>
+                            </div>
+                            <button class="agregar-carrito" onclick="agregarAlCarrito(${producto.id})" ${producto.stock === 0 ? "disabled" : ""}>
+                                ${producto.stock === 0 ? "Agotado" : "Agregar al carrito"}
+                            </button>
+                        </div>
+                    </div>
+                `;
+          container.innerHTML += html;
+        });
+      }
+
+      // Función para agregar al carrito
+      function agregarAlCarrito(idProducto) {
+        const producto = productos.find((p) => p.id === idProducto);
+        if (producto && producto.stock > 0) {
+          const itemExistente = carrito.find((item) => item.id === idProducto);
+
+          if (itemExistente) {
+            itemExistente.cantidad++;
+          } else {
+            carrito.push({ ...producto, cantidad: 1 });
+          }
+
+          actualizarCarrito();
+          alert(`✓ ${producto.nombre} agregado al carrito`);
+        }
+      }
+
+      // Función para actualizar el carrito
+      function actualizarCarrito() {
+        const totalItems = carrito.reduce(
+          (sum, item) => sum + item.cantidad,
+          0,
+        );
+        document.getElementById("cart-count").textContent = totalItems;
+      }
+
+      // Filtro de precio
+      document
+        .getElementById("filtro-precio")
+        .addEventListener("input", (e) => {
+          const valor = e.target.value;
+          document.getElementById("precio-rango").textContent =
+            `$0 - $${valor}`;
+          const filtrados = productos.filter((p) => p.precio <= valor);
+          renderProductos(filtrados);
+        });
+
+      // Buscador
+      document.getElementById("busqueda").addEventListener("keyup", (e) => {
+        const termino = e.target.value.toLowerCase();
+        const filtrados = productos.filter(
+          (p) =>
+            p.nombre.toLowerCase().includes(termino) ||
+            p.marca.toLowerCase().includes(termino) ||
+            p.descripcion.toLowerCase().includes(termino),
+        );
+        renderProductos(filtrados);
+      });
+
+      // Cargar productos al iniciar
+      renderProductos();
+    </script>
   </body>
 </html>
